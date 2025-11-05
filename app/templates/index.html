@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Job Hunt Tracker{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h1 class="display-4 mb-0">Dashboard</h1>
+        <p class="lead text-muted">Your job hunt overview</p>
+    </div>
+</div>
+
+<!-- Statistics Cards -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4 class="card-title">{{ total_apps }}</h4>
+                        <p class="card-text">Total Applications</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-file-alt fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-warning text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4 class="card-title">{{ pending_apps }}</h4>
+                        <p class="card-text">Pending</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-clock fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4 class="card-title">{{ this_week }}</h4>
+                        <p class="card-text">This Week</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-calendar-week fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h4 class="card-title">
+                            {% for status, count in status_counts %}
+                                {% if status == 'Offer' %}{{ count }}{% endif %}
+                            {% else %}0{% endfor %}
+                        </h4>
+                        <p class="card-text">Offers</p>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-trophy fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Status Breakdown -->
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-chart-pie me-2"></i>Application Status Breakdown
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if status_counts %}
+                    {% for status, count in status_counts %}
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span>{{ status }}</span>
+                            <div class="d-flex align-items-center">
+                                <div class="progress me-3" style="width: 100px; height: 10px;">
+                                    <div class="progress-bar bg-{{ 'success' if status == 'Offer' else 'primary' if status == 'Applied' else 'warning' if status == 'Interview Scheduled' else 'info' if status == 'Interviewed' else 'danger' }}" 
+                                         style="width: {{ (count / total_apps * 100) if total_apps > 0 else 0 }}%"></div>
+                                </div>
+                                <span class="badge bg-secondary">{{ count }}</span>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted">No applications yet. <a href="{{ url_for('main.add_application') }}">Add your first application</a></p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Applications -->
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-history me-2"></i>Recent Applications
+                </h5>
+                <a href="{{ url_for('main.applications') }}" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            <div class="card-body">
+                {% if recent_apps %}
+                    {% for app in recent_apps %}
+                        <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                            <div>
+                                <strong>{{ app.position }}</strong><br>
+                                <small class="text-muted">{{ app.company_name }}</small>
+                            </div>
+                            <div class="text-end">
+                                <span class="badge bg-{{ app.status_color }}">{{ app.status }}</span><br>
+                                <small class="text-muted">{{ app.date_applied.strftime('%m/%d/%Y') }}</small>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted">No applications yet. <a href="{{ url_for('main.add_application') }}">Add your first application</a></p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-rocket me-2"></i>Quick Actions
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 mb-2">
+                        <a href="{{ url_for('main.add_application') }}" class="btn btn-primary w-100">
+                            <i class="fas fa-plus me-2"></i>Add Application
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <a href="{{ url_for('main.add_company') }}" class="btn btn-outline-primary w-100">
+                            <i class="fas fa-building me-2"></i>Add Company
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <a href="{{ url_for('main.analytics') }}" class="btn btn-outline-primary w-100">
+                            <i class="fas fa-chart-bar me-2"></i>View Analytics
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <a href="{{ url_for('main.applications') }}" class="btn btn-outline-primary w-100">
+                            <i class="fas fa-list me-2"></i>All Applications
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

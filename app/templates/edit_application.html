@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Application - Job Hunt Tracker{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h1 class="display-4 mb-0">Edit Application</h1>
+        <p class="lead text-muted">Update {{ application.position }} at {{ application.company_name }}</p>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            {{ form.position.label(class="form-label") }}
+                            {{ form.position(class="form-control" + (" is-invalid" if form.position.errors else "")) }}
+                            {% if form.position.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.position.errors[0] }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form.company_name.label(class="form-label") }}
+                            {{ form.company_name(class="form-control" + (" is-invalid" if form.company_name.errors else "")) }}
+                            {% if form.company_name.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.company_name.errors[0] }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            {{ form.status.label(class="form-label") }}
+                            {{ form.status(class="form-select" + (" is-invalid" if form.status.errors else "")) }}
+                            {% if form.status.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.status.errors[0] }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-4">
+                            {{ form.priority.label(class="form-label") }}
+                            {{ form.priority(class="form-select" + (" is-invalid" if form.priority.errors else "")) }}
+                            {% if form.priority.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.priority.errors[0] }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-4">
+                            {{ form.date_applied.label(class="form-label") }}
+                            {{ form.date_applied(class="form-control" + (" is-invalid" if form.date_applied.errors else "")) }}
+                            {% if form.date_applied.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.date_applied.errors[0] }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            {{ form.job_link.label(class="form-label") }}
+                            {{ form.job_link(class="form-control" + (" is-invalid" if form.job_link.errors else ""), placeholder="https://...") }}
+                            {% if form.job_link.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.job_link.errors[0] }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form.salary_range.label(class="form-label") }}
+                            {{ form.salary_range(class="form-control" + (" is-invalid" if form.salary_range.errors else ""), placeholder="e.g., $60k - $80k") }}
+                            {% if form.salary_range.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.salary_range.errors[0] }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.notes.label(class="form-label") }}
+                        {{ form.notes(class="form-control" + (" is-invalid" if form.notes.errors else ""), rows="4", placeholder="Additional notes about this application...") }}
+                        {% if form.notes.errors %}
+                            <div class="invalid-feedback">
+                                {{ form.notes.errors[0] }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('main.applications') }}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>Back to Applications
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i>Update Application
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
