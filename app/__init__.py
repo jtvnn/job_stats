@@ -19,11 +19,14 @@ def create_app():
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or 'dev-secret-key'
     
     # Database configuration
-    database_url = os.environ.get('DATABASE_URL') or 'sqlite:///instance/job_tracker.db'
-    
-    # Fix for Render's PostgreSQL URL format
-    if database_url.startswith('postgres://'):
-        database_url = database_url.replace('postgres://', 'postgresql://', 1)
+    if os.environ.get('DATABASE_URL'):
+        database_url = os.environ.get('DATABASE_URL')
+        # Fix for Render's PostgreSQL URL format
+        if database_url.startswith('postgres://'):
+            database_url = database_url.replace('postgres://', 'postgresql://', 1)
+    else:
+        # Use simple relative path for SQLite database
+        database_url = 'sqlite:///job_tracker.db'
     
     app.config['SQLALCHEMY_DATABASE_URI'] = database_url
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -48,12 +51,6 @@ def create_app():
     # Create database tables
     with app.app_context():
         try:
-            # Ensure the instance directory exists for SQLite
-            if app.config['SQLALCHEMY_DATABASE_URI'].startswith('sqlite:'):
-                instance_path = os.path.dirname(app.config['SQLALCHEMY_DATABASE_URI'].replace('sqlite:///', ''))
-                if instance_path and not os.path.exists(instance_path):
-                    os.makedirs(instance_path, exist_ok=True)
-            
             # Create all database tables
             db.create_all()
             print("Database tables created successfully!")
