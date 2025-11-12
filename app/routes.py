@@ -175,6 +175,17 @@ def delete_company(id):
     
     return redirect(url_for('main.companies'))
 
+@main.route('/init-db')
+def init_database():
+    """Initialize database tables - useful for production deployment"""
+    try:
+        db.create_all()
+        flash('Database initialized successfully!', 'success')
+    except Exception as e:
+        flash(f'Database initialization failed: {str(e)}', 'error')
+    
+    return redirect(url_for('main.index'))
+
 @main.route('/analytics')
 def analytics():
     """Analytics and statistics page"""

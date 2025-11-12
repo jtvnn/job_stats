@@ -47,13 +47,19 @@ def create_app():
     
     # Create database tables
     with app.app_context():
-        # Ensure the instance directory exists for SQLite
-        if app.config['SQLALCHEMY_DATABASE_URI'].startswith('sqlite:'):
-            import os
-            instance_path = os.path.dirname(app.config['SQLALCHEMY_DATABASE_URI'].replace('sqlite:///', ''))
-            if instance_path and not os.path.exists(instance_path):
-                os.makedirs(instance_path, exist_ok=True)
-        
-        db.create_all()
+        try:
+            # Ensure the instance directory exists for SQLite
+            if app.config['SQLALCHEMY_DATABASE_URI'].startswith('sqlite:'):
+                instance_path = os.path.dirname(app.config['SQLALCHEMY_DATABASE_URI'].replace('sqlite:///', ''))
+                if instance_path and not os.path.exists(instance_path):
+                    os.makedirs(instance_path, exist_ok=True)
+            
+            # Create all database tables
+            db.create_all()
+            print("Database tables created successfully!")
+        except Exception as e:
+            print(f"Database initialization warning: {e}")
+            # Don't fail app startup if database creation fails initially
+            # Tables will be created on first request if needed
     
     return app
