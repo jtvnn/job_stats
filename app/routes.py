@@ -150,6 +150,31 @@ def add_company():
     
     return render_template('add_company.html', form=form)
 
+@main.route('/companies/delete/<int:id>', methods=['POST'])
+def delete_company(id):
+    """Delete a company and all associated applications"""
+    company = Company.query.get_or_404(id)
+    company_name = company.name
+    
+    # Count applications before deletion for feedback message
+    applications_count = len(company.applications)
+    
+    try:
+        # Delete the company (cascade will handle applications)
+        db.session.delete(company)
+        db.session.commit()
+        
+        if applications_count > 0:
+            flash(f'Company "{company_name}" and {applications_count} associated application(s) deleted successfully!', 'success')
+        else:
+            flash(f'Company "{company_name}" deleted successfully!', 'success')
+            
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Error deleting company: {str(e)}', 'error')
+    
+    return redirect(url_for('main.companies'))
+
 @main.route('/analytics')
 def analytics():
     """Analytics and statistics page"""

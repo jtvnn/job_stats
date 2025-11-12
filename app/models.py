@@ -11,8 +11,8 @@ class Company(db.Model):
     notes = db.Column(db.Text)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     
-    # Relationship with applications
-    applications = db.relationship('Application', backref='company_ref', lazy=True)
+    # Relationship with applications (cascade delete)
+    applications = db.relationship('Application', backref='company_ref', lazy=True, cascade='all, delete-orphan')
     
     def __repr__(self):
         return f'<Company {self.name}>'
