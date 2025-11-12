@@ -15,10 +15,11 @@ A comprehensive web application for tracking job applications, managing company 
 ## Technology Stack
 
 - **Backend**: Python Flask
-- **Database**: SQLite with SQLAlchemy ORM
+- **Database**: SQLite (development) / PostgreSQL (production)
 - **Frontend**: HTML5, CSS3, JavaScript with Bootstrap 5
 - **Charts**: Chart.js for data visualization
 - **Forms**: Flask-WTF for form handling
+- **Deployment**: Render with PostgreSQL database
 
 ## Prerequisites
 
@@ -194,6 +195,39 @@ The application uses the following environment variables:
 - `FLASK_ENV`: Environment mode (development/production)
 - `SECRET_KEY`: Secret key for session security
 - `DATABASE_URL`: Database connection string
+
+## Deployment
+
+### Production Deployment with PostgreSQL on Render
+
+This application is ready for production deployment on Render with PostgreSQL database support.
+
+**Quick Deployment:**
+
+1. **Push to GitHub**:
+   ```bash
+   git add .
+   git commit -m "Ready for production deployment"
+   git push origin main
+   ```
+
+2. **Deploy to Render**:
+   - Go to [render.com](https://render.com) and sign up
+   - Click "New +" → "Blueprint"
+   - Connect your GitHub repository
+   - Render will automatically detect the `render.yaml` configuration
+   - Click "Apply" to deploy both web service and PostgreSQL database
+
+3. **Access Your Live App**: Your app will be available at `https://your-app-name.onrender.com`
+
+**Features in Production:**
+- ✅ PostgreSQL database for scalability and reliability
+- ✅ Automatic SSL/HTTPS
+- ✅ Database migrations handled automatically
+- ✅ Environment variables securely managed
+- ✅ Free tier available with option to scale
+
+For detailed deployment instructions, see [DEPLOYMENT.md](DEPLOYMENT.md).
 
 ## Contributing
 
