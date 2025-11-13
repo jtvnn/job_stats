@@ -15,11 +15,10 @@ A comprehensive web application for tracking job applications, managing company 
 ## Technology Stack
 
 - **Backend**: Python Flask
-- **Database**: SQLite (development) / PostgreSQL (production)
+- **Database**: SQLite (lightweight, no setup required)
 - **Frontend**: HTML5, CSS3, JavaScript with Bootstrap 5
 - **Charts**: Chart.js for data visualization
 - **Forms**: Flask-WTF for form handling
-- **Deployment**: Render with PostgreSQL database
 
 ## Prerequisites
 

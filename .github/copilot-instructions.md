@@ -6,8 +6,8 @@
 This is a job hunt tracking application built with Python backend, SQLite database, and web interface to help track job applications, statistics, and manage job description links.
 
 ## Development Guidelines
-- Use Python with Flask or FastAPI for the backend
-- SQLite for lightweight database storage
+- Use Python with Flask for the backend
+- SQLite for lightweight database storage (no external database setup required)
 - HTML/CSS/JavaScript for the frontend
 - Follow clean code practices and proper error handling
 - Include comprehensive logging for debugging
