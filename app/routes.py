@@ -10,11 +10,27 @@ main = Blueprint('main', __name__)
 @main.route('/')
 def index():
     """Dashboard with statistics and recent applications"""
+    # Initialize database tables if they don't exist
+    try:
+        db.create_all()
+    except Exception as e:
+        print(f"Database initialization in route: {e}")
+    
     # Get basic statistics
-    total_apps = Application.query.count()
-    pending_apps = Application.query.filter(
-        Application.status.in_([ApplicationStatus.APPLIED, ApplicationStatus.INTERVIEW_SCHEDULED])
-    ).count()
+    try:
+        total_apps = Application.query.count()
+        pending_apps = Application.query.filter(
+            Application.status.in_([ApplicationStatus.APPLIED, ApplicationStatus.INTERVIEW_SCHEDULED])
+        ).count()
+    except Exception as e:
+        print(f"Database query error: {e}")
+        # Return basic page with empty data if database fails
+        return render_template('index.html', 
+                             total_apps=0, 
+                             pending_apps=0, 
+                             recent_apps=[], 
+                             companies_count=0,
+                             status_counts=[])
     
     # Status breakdown
     status_counts = db.session.query(
